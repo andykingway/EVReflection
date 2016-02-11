@@ -71,8 +71,8 @@ public extension NSObject {
     
     :returns: The json string
     */
-    final public func toJsonString(performKeyCleanup:Bool = false) -> String {
-        return EVReflection.toJsonString(self, performKeyCleanup: performKeyCleanup)
+    final public func toJsonString(performKeyCleanup:Bool = false, prettyPrinted: Bool = false) -> String {
+        return EVReflection.toJsonString(self, performKeyCleanup: performKeyCleanup, prettyPrinted: prettyPrinted)
     }
     
     /**
