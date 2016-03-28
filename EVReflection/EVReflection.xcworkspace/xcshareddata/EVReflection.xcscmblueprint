@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "C340B50EE85733D3EA247F313D2350126F116920",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "C340B50EE85733D3EA247F313D2350126F116920" : 0,
+    "4B6FFC2DBBE7C101DA202EDB1960FD8D75BD1CBD" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "4809850A-AC0F-4E58-B281-9F59D2AB73C7",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "C340B50EE85733D3EA247F313D2350126F116920" : "EVReflection\/",
+    "4B6FFC2DBBE7C101DA202EDB1960FD8D75BD1CBD" : "..\/.."
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "EVReflection",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "EVReflection\/EVReflection.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "ssh:\/\/192.168.6.10\/its_ios\/EzgoApp.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "4B6FFC2DBBE7C101DA202EDB1960FD8D75BD1CBD"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/andykingway\/EVReflection.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "C340B50EE85733D3EA247F313D2350126F116920"
+    }
+  ]
+}

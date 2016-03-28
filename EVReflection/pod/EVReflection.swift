@@ -581,8 +581,9 @@ final public class EVReflection {
      
      :returns: Nothing
      */
-    public static func setObjectValue<T where T:NSObject>(anyObject: T, key:String, var value:AnyObject?, typeInObject:String? = nil) {
-        if value == nil || value as? NSNull != nil {
+    public static func setObjectValue<T where T:NSObject>(anyObject: T, key:String, value:AnyObject?, typeInObject:String? = nil) {
+        var newVal = value
+        if newVal == nil || newVal as? NSNull != nil {
             //            do {
             //                var nilValue: AnyObject? = Optional.None
             //                try anyObject.validateValue(&nilValue, forKey: key)
@@ -591,33 +592,33 @@ final public class EVReflection {
             //            }
         } else {
             // Let us put a number into a string property by taking it's stringValue
-            let (_, type, _) = valueForAny("", key: key, anyValue: value)
+            let (_, type, _) = valueForAny("", key: key, anyValue: newVal)
             if (typeInObject == "String" || typeInObject == "NSString") && type == "NSNumber" {
-                if let convertedValue = value as? NSNumber {
-                    value = convertedValue.stringValue
+                if let convertedValue = newVal as? NSNumber {
+                    newVal = convertedValue.stringValue
                 }
             } else if typeInObject == "NSNumber" && (type == "String" || type == "NSString") {
-                if let convertedValue = value as? String {
-                    value = NSNumber(double: Double(convertedValue) ?? 0)
-                    if value == nil {
+                if let convertedValue = newVal as? String {
+                    newVal = NSNumber(double: Double(convertedValue) ?? 0)
+                    if newVal == nil {
                         NSLog("ERROR: Could not initialize a NSNumber for value \(convertedValue)")
                         return
                     }
                 }
             } else if typeInObject == "NSDate"  && (type == "String" || type == "NSString") {
-                if let convertedValue = value as? String {
-                    value = getDateFormatter().dateFromString(convertedValue)
-                    if value == nil {
+                if let convertedValue = newVal as? String {
+                    newVal = getDateFormatter().dateFromString(convertedValue)
+                    if newVal == nil {
                         NSLog("ERROR: The dateformatter returend nil for value \(convertedValue)")
                         return
                     }
                 }
             }
             if let (_, propertySetter, _) = (anyObject as? EVObject)?.propertyConverters().filter({$0.0 == key}).first {
-                propertySetter(value)
+                propertySetter(newVal)
                 return
             }
-            anyObject.setValue(value!, forKey: key)
+            anyObject.setValue(newVal!, forKey: key)
         }
     }
     
@@ -738,30 +739,31 @@ final public class EVReflection {
      
      :returns: The converted value
      */
-    private static func dictionaryAndArrayConversion(fieldType:String?, original:NSObject?, var dictValue: AnyObject?) -> AnyObject? {
+    private static func dictionaryAndArrayConversion(fieldType:String?, original:NSObject?, dictValue: AnyObject?) -> AnyObject? {
+        var newDictVal = dictValue
         if let type = fieldType {
-            if type.hasPrefix("Array<") && dictValue as? NSDictionary != nil {
-                if (dictValue as! NSDictionary).count == 1 {
+            if type.hasPrefix("Array<") && newDictVal as? NSDictionary != nil {
+                if (newDictVal as! NSDictionary).count == 1 {
                     // XMLDictionary fix
-                    if let i = (dictValue as! NSDictionary).generate().next()!.value as? NSArray {
-                        dictValue = i
-                        dictValue = dictArrayToObjectArray(type, array: dictValue as! [NSDictionary]) as [NSObject]
+                    if let i = (newDictVal as! NSDictionary).generate().next()!.value as? NSArray {
+                        newDictVal = i
+                        newDictVal = dictArrayToObjectArray(type, array: newDictVal as! [NSDictionary]) as [NSObject]
                     }
                 } else {
                     // Single object array fix
                     var array:[NSDictionary] = [NSDictionary]()
-                    array.append(dictValue as! NSDictionary)
-                    dictValue = array
+                    array.append(newDictVal as! NSDictionary)
+                    newDictVal = array
                 }
-            } else if type != "NSDictionary" && dictValue as? NSDictionary != nil {
+            } else if type != "NSDictionary" && newDictVal as? NSDictionary != nil {
                 // Sub object
-                dictValue = dictToObject(type, original:original ,dict: dictValue as! NSDictionary)
-            } else if type.rangeOfString("<NSDictionary>") == nil && dictValue as? [NSDictionary] != nil {
+                newDictVal = dictToObject(type, original:original ,dict: newDictVal as! NSDictionary)
+            } else if type.rangeOfString("<NSDictionary>") == nil && newDictVal as? [NSDictionary] != nil {
                 // Array of objects
-                dictValue = dictArrayToObjectArray(type, array: dictValue as! [NSDictionary]) as [NSObject]
+                newDictVal = dictArrayToObjectArray(type, array: newDictVal as! [NSDictionary]) as [NSObject]
             }
         }
-        return dictValue
+        return newDictVal
     }
     
     /**
