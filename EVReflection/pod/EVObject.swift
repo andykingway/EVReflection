@@ -58,7 +58,7 @@ public class EVObject: NSObject, NSCoding { // These are redundant in Swift 2+: 
     
     :parameter: aCoder The NSCoder that will be used for encoding the object
     */
-    public func encodeWithCoder(aCoder: NSCoder) {
+    public func encode(with aCoder: NSCoder) {
         EVReflection.encodeWithCoder(self, aCoder: aCoder)
     }        
     
@@ -69,8 +69,8 @@ public class EVObject: NSObject, NSCoding { // These are redundant in Swift 2+: 
     */
     public convenience required init(fileNameInTemp:String) {
         self.init()
-        let filePath = (NSTemporaryDirectory() as NSString).stringByAppendingPathComponent(fileNameInTemp)
-        if let temp = NSKeyedUnarchiver.unarchiveObjectWithFile(filePath) as? NSObject {
+        let filePath = (NSTemporaryDirectory() as NSString).appendingPathComponent(fileNameInTemp)
+        if let temp = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) as? NSObject {
             EVReflection.setPropertiesfromDictionary( temp.toDictionary(false), anyObject: self)
         }
     }
@@ -82,8 +82,8 @@ public class EVObject: NSObject, NSCoding { // These are redundant in Swift 2+: 
     */
     public convenience required init(fileNameInDocuments:String) {
         self.init()
-        let filePath = (NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as NSString).stringByAppendingPathComponent(fileNameInDocuments)
-        if let temp = NSKeyedUnarchiver.unarchiveObjectWithFile(filePath) as? NSObject {
+        let filePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(fileNameInDocuments)
+        if let temp = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) as? NSObject {
             EVReflection.setPropertiesfromDictionary( temp.toDictionary(false), anyObject: self)
         }
     }
@@ -140,8 +140,8 @@ public class EVObject: NSObject, NSCoding { // These are redundant in Swift 2+: 
     
     :returns: Nothing
     */
-    public func saveToTemp(fileName:String) -> Bool {
-        let filePath = (NSTemporaryDirectory() as NSString).stringByAppendingPathComponent(fileName)
+    public func saveToTemp(_ fileName:String) -> Bool {
+        let filePath = (NSTemporaryDirectory() as NSString).appendingPathComponent(fileName)
         return NSKeyedArchiver.archiveRootObject(self, toFile: filePath)
     }
 
@@ -157,8 +157,8 @@ public class EVObject: NSObject, NSCoding { // These are redundant in Swift 2+: 
         
         :returns: Nothing
         */
-        public func saveToDocuments(fileName:String) -> Bool {
-            let filePath = (NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as NSString).stringByAppendingPathComponent(fileName)
+        public func saveToDocuments(_ fileName:String) -> Bool {
+            let filePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(fileName)
             return NSKeyedArchiver.archiveRootObject(self, toFile: filePath)
         }
     #endif
@@ -175,7 +175,7 @@ public class EVObject: NSObject, NSCoding { // These are redundant in Swift 2+: 
 
     :returns: Returns true if the object is the same otherwise false
     */
-    public override func isEqual(object: AnyObject?) -> Bool { // for isEqual:
+    public override func isEqual(_ object: AnyObject?) -> Bool { // for isEqual:
         if let dataObject = object as? EVObject {
             return dataObject == self // just use our "==" function
         }
@@ -193,7 +193,7 @@ public class EVObject: NSObject, NSCoding { // These are redundant in Swift 2+: 
 
     :returns: Nothing
     */
-    public override func setValue(value: AnyObject!, forUndefinedKey key: String) {
+    public override func setValue(_ value: AnyObject!, forUndefinedKey key: String) {
         if let _ = self as? EVGenericsKVC {
             NSLog("\nWARNING: Your class should have implemented the setValue forUndefinedKey. \n")
         }
@@ -230,7 +230,7 @@ public class EVObject: NSObject, NSCoding { // These are redundant in Swift 2+: 
      
      - returns: The specific type
      */
-    public func getSpecificType(dict: NSDictionary) -> EVObject {
+    public func getSpecificType(_ dict: NSDictionary) -> EVObject {
         return self
     }
 }

@@ -32,7 +32,7 @@ public class EVObjectDescription {
         /// The Class
         case Class = "C"
         /// The Protocol
-        case Protocol = "P"
+        case `Protocol` = "P"
         /// The function
         case Function = "F"
         /// A generic class
@@ -49,16 +49,16 @@ public class EVObjectDescription {
         swiftClassID = NSStringFromClass(forObject.dynamicType)
         
         if (swiftClassID.hasPrefix("_T")) {
-            parseTypes((swiftClassID as NSString).substringFromIndex(2))
+            parseTypes((swiftClassID as NSString).substring(from: 2))
             bundleName = classPath[0]
             className = classPath.last!
         } else {
             // Root objects will already have a . notation
-            classPath = swiftClassID.characters.split(isSeparator: {$0 == "."}).map({String($0)})
+            classPath = swiftClassID.characters.split(whereSeparator: {$0 == "."}).map({String($0)})
             if classPath.count > 1 {
                 bundleName = classPath[0]
                 className = classPath.last!
-                classPathType = [ObjectType](count: classPath.count, repeatedValue: ObjectType.Class)
+                classPathType = [ObjectType](repeating: ObjectType.Class, count: classPath.count)
                 classPathType[0] = .Target
             }
         }
@@ -71,7 +71,7 @@ public class EVObjectDescription {
     
     :returns: Nothing
     */
-    private func parseTypes(classString:String) {
+    private func parseTypes(_ classString:String) {
         let characters = Array(classString.characters)
         let type:String = String(characters[0])
         if Int(type) == nil {
@@ -79,9 +79,9 @@ public class EVObjectDescription {
             if ot == .Target {
                 classPathType.append(ot)
             } else {
-                classPathType.insert(ot, atIndex: 1) // after Target all types are in reverse order
+                classPathType.insert(ot, at: 1) // after Target all types are in reverse order
             }
-            parseTypes((classString as NSString).substringFromIndex(1))
+            parseTypes((classString as NSString).substring(from: 1))
         } else {
             parseNames(classString)
         }
@@ -94,7 +94,7 @@ public class EVObjectDescription {
     
     :returns: Nothing
     */
-    private func parseNames(classString:String) {
+    private func parseNames(_ classString:String) {
         let characters = Array(classString.characters)
         var numForName = ""
         var index = 0
@@ -103,9 +103,9 @@ public class EVObjectDescription {
             index += 1
         }
         //let range = Range<String.Index>(start:classString.startIndex.advancedBy(index), end:classString.startIndex.advancedBy((Int(numForName) ?? 0) + index))
-        let range = classString.startIndex.advancedBy(index)..<classString.startIndex.advancedBy((Int(numForName) ?? 0) + index)
+        let range = classString.characters.index(classString.startIndex, offsetBy: index)..<classString.characters.index(classString.startIndex, offsetBy: (Int(numForName) ?? 0) + index)
         
-        let name = classString.substringWithRange(range)
+        let name = classString.substring(with: range)
         classPath.append(name)
         if name == "" {
             return
@@ -129,14 +129,14 @@ public class EVObjectDescription {
             //Ends with CS_ then there will be return value(s)
             
             // New in Swift 2.3              FT_T_L_
-            if classString.containsString("FS0_") {
+            if classString.contains("FS0_") {
                 index = index + 11
             } else {
                 index = index + 7
             }            
         }
         if characters.count > index + Int(numForName)! {
-            parseNames((classString as NSString).substringFromIndex(index + Int(numForName)!))
+            parseNames((classString as NSString).substring(from: index + Int(numForName)!))
         }
     }
 }

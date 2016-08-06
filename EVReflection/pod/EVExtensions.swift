@@ -59,7 +59,7 @@ public extension NSObject {
     
     :returns: The dictionary
     */
-    final public func toDictionary(performKeyCleanup:Bool = false) -> NSDictionary {
+    final public func toDictionary(_ performKeyCleanup:Bool = false) -> NSDictionary {
         let (reflected, _) = EVReflection.toDictionary(self, performKeyCleanup: performKeyCleanup)
         return reflected
     }
@@ -71,7 +71,7 @@ public extension NSObject {
     
     :returns: The json string
     */
-    final public func toJsonString(performKeyCleanup:Bool = false, prettyPrinted: Bool = false) -> String {
+    final public func toJsonString(_ performKeyCleanup:Bool = false, prettyPrinted: Bool = false) -> String {
         return EVReflection.toJsonString(self, performKeyCleanup: performKeyCleanup, prettyPrinted: prettyPrinted)
     }
     
@@ -82,7 +82,7 @@ public extension NSObject {
     
     :returns: An array of objects
     */
-    public class func arrayFromJson<T where T:NSObject>(json:String?) -> [T] {
+    public class func arrayFromJson<T where T:NSObject>(_ json:String?) -> [T] {
         return EVReflection.arrayFromJson(T(), json: json)
     }
     
@@ -132,7 +132,7 @@ public extension Array {
     
     :returns: The object type
     */
-    public func getArrayTypeInstance<T>(arr:Array<T>) -> T {
+    public func getArrayTypeInstance<T>(_ arr:Array<T>) -> T {
         return arr.getTypeInstance()
     }
     
@@ -155,8 +155,8 @@ public extension Array {
     
     :returns: The json string
     */
-    public func toJsonString(performKeyCleanup:Bool = false) -> String {
-        return "[\n" + self.map({($0 as! NSObject).toJsonString(performKeyCleanup)}).joinWithSeparator(", \n") + "\n]"
+    public func toJsonString(_ performKeyCleanup:Bool = false) -> String {
+        return "[\n" + self.map({($0 as! NSObject).toJsonString(performKeyCleanup)}).joined(separator: ", \n") + "\n]"
     }
     
     /**
@@ -166,7 +166,7 @@ public extension Array {
      
      :returns: The array of dictionaries
      */
-    public func toDictionaryArray(performKeyCleanup:Bool = false) -> NSArray {
+    public func toDictionaryArray(_ performKeyCleanup:Bool = false) -> NSArray {
         return self.map({($0 as! NSObject).toDictionary(performKeyCleanup)})
     }
     
