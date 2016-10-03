@@ -39,7 +39,7 @@ public class EVObject: NSObject, NSCoding { // These are redundant in Swift 2+: 
     */
     public required convenience init(dictionary:NSDictionary) {
         self.init()
-        EVReflection.setPropertiesfromDictionary(dictionary, anyObject: self)
+        _ = EVReflection.setPropertiesfromDictionary(dictionary, anyObject: self)
     }
     
     /**
@@ -50,7 +50,7 @@ public class EVObject: NSObject, NSCoding { // These are redundant in Swift 2+: 
     public required convenience init(json:String?) {
         self.init()
         let jsonDict = EVReflection.dictionaryFromJson(json)
-        EVReflection.setPropertiesfromDictionary(jsonDict, anyObject: self)
+        _ = EVReflection.setPropertiesfromDictionary(jsonDict as NSDictionary, anyObject: self)
     }
     
     /**
@@ -71,7 +71,7 @@ public class EVObject: NSObject, NSCoding { // These are redundant in Swift 2+: 
         self.init()
         let filePath = (NSTemporaryDirectory() as NSString).appendingPathComponent(fileNameInTemp)
         if let temp = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) as? NSObject {
-            EVReflection.setPropertiesfromDictionary( temp.toDictionary(false), anyObject: self)
+            _ = EVReflection.setPropertiesfromDictionary( temp.toDictionary(false), anyObject: self)
         }
     }
     
@@ -84,7 +84,7 @@ public class EVObject: NSObject, NSCoding { // These are redundant in Swift 2+: 
         self.init()
         let filePath = (NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0] as NSString).appendingPathComponent(fileNameInDocuments)
         if let temp = NSKeyedUnarchiver.unarchiveObject(withFile: filePath) as? NSObject {
-            EVReflection.setPropertiesfromDictionary( temp.toDictionary(false), anyObject: self)
+            _ = EVReflection.setPropertiesfromDictionary( temp.toDictionary(false), anyObject: self)
         }
     }
     
@@ -175,7 +175,7 @@ public class EVObject: NSObject, NSCoding { // These are redundant in Swift 2+: 
 
     :returns: Returns true if the object is the same otherwise false
     */
-    public override func isEqual(_ object: AnyObject?) -> Bool { // for isEqual:
+    public override func isEqual(_ object: Any?) -> Bool { // for isEqual:
         if let dataObject = object as? EVObject {
             return dataObject == self // just use our "==" function
         }
@@ -193,7 +193,7 @@ public class EVObject: NSObject, NSCoding { // These are redundant in Swift 2+: 
 
     :returns: Nothing
     */
-    public override func setValue(_ value: AnyObject!, forUndefinedKey key: String) {
+    public override func setValue(_ value: Any!, forUndefinedKey key: String) {
         if let _ = self as? EVGenericsKVC {
             NSLog("\nWARNING: Your class should have implemented the setValue forUndefinedKey. \n")
         }

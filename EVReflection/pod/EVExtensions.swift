@@ -40,7 +40,7 @@ public extension NSObject {
     */
     public convenience init(dictionary:NSDictionary) {
         self.init()
-        EVReflection.setPropertiesfromDictionary(dictionary, anyObject: self)
+        _ = EVReflection.setPropertiesfromDictionary(dictionary, anyObject: self)
     }
     
     /**
@@ -49,7 +49,7 @@ public extension NSObject {
     public convenience init(json:String?) {
         self.init()
         let jsonDict = EVReflection.dictionaryFromJson(json)
-        EVReflection.setPropertiesfromDictionary(jsonDict, anyObject: self)
+        _ = EVReflection.setPropertiesfromDictionary(jsonDict as NSDictionary, anyObject: self)
     }
     
     /**
@@ -82,7 +82,7 @@ public extension NSObject {
     
     :returns: An array of objects
     */
-    public class func arrayFromJson<T where T:NSObject>(_ json:String?) -> [T] {
+    public class func arrayFromJson<T>(_ json:String?) -> [T] where T:NSObject {
         return EVReflection.arrayFromJson(T(), json: json)
     }
     
@@ -94,7 +94,7 @@ public extension NSObject {
      
      - returns: The targe object with the mapped values
      */
-    public func mapObjectTo<T where T:NSObject>() -> T {
+    public func mapObjectTo<T>() -> T where T:NSObject {
         let nsobjectype : NSObject.Type = T.self as NSObject.Type
         let nsobject: NSObject = nsobjectype.init()
         let dict = self.toDictionary()
@@ -167,7 +167,8 @@ public extension Array {
      :returns: The array of dictionaries
      */
     public func toDictionaryArray(_ performKeyCleanup:Bool = false) -> NSArray {
-        return self.map({($0 as! NSObject).toDictionary(performKeyCleanup)})
+        return self.map({($0 as? EVObject ?? EVObject()).toDictionary(performKeyCleanup)}) as NSArray
+//        return self.map({($0 as! NSObject).toDictionary(performKeyCleanup)})
     }
     
 }

@@ -46,7 +46,7 @@ public class EVObjectDescription {
     */
     public init(forObject: NSObject) {
         bundleName = EVReflection.getCleanAppName()
-        swiftClassID = NSStringFromClass(forObject.dynamicType)
+        swiftClassID = NSStringFromClass(type(of: forObject))
         
         if (swiftClassID.hasPrefix("_T")) {
             parseTypes((swiftClassID as NSString).substring(from: 2))
